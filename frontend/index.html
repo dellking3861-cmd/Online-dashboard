@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Online Store Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Toast Notifications Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Header -->
+  <header class="header">
+    <h1>Online Store Dashboard</h1>
+  </header>
+
+  <!-- Main Container -->
+  <main class="container">
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <button id="addProductBtn" class="btn btn-green">+ Add Product</button>
+      <input type="text" id="searchInput" class="search-input" placeholder="Search products...">
+    </div>
+
+    <!-- Products Table -->
+    <div class="table-wrapper">
+      <table class="products-table" id="productsTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Category</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="productBody">
+          <!-- Products yahan JavaScript se add honge -->
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- Modal (Add/Edit Product) -->
+  <div id="productModal" class="modal-overlay hidden">
+    <div class="modal">
+      <h2 id="modalTitle">Add Product</h2>
+      <form id="productForm">
+        <div class="form-group">
+          <label for="productName">Name</label>
+          <input type="text" id="productName" name="name" required>
+        </div>
+        <div class="form-group">
+          <label for="productPrice">Price</label>
+          <input type="number" id="productPrice" name="price" required>
+        </div>
+        <div class="form-group">
+          <label for="productStock">Stock</label>
+          <input type="number" id="productStock" name="stock" required>
+        </div>
+        <div class="form-group">
+          <label for="productCategory">Category</label>
+          <input type="text" id="productCategory" name="category" required>
+        </div>
+        <div class="modal-actions">
+          <button type="submit" class="btn btn-green">Save</button>
+          <button type="button" id="cancelBtn" class="btn btn-gray">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="script.js"></script>
+</body>
+</html>
