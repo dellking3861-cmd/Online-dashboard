@@ -1,8 +1,12 @@
 // ===== Supabase Client Initialization =====
+// NOTE: The CDN (<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">)
+// already exposes a global `supabase` object. So we store our client in a
+// differently-named variable to avoid the "Identifier 'supabase' has already
+// been declared" error. There is exactly ONE client initialized here.
 
 const supabaseUrl = 'https://dntjgvacurwpcyavwdkc.supabase.co';
 const supabaseKey = 'sb_publishable_-_6VQDTsincVrv5FwvCZow_g1F7dFHA';
-const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
 // DOMContentLoaded par loadProducts() call karo
 document.addEventListener('DOMContentLoaded', () => {
@@ -38,7 +42,7 @@ async function loadProducts() {
   tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#888;">Loading...</td></tr>';
 
   try {
-    const { data: products, error } = await supabase
+    const { data: products, error } = await supabaseClient
       .from('products')
       .select('*');
 
@@ -136,7 +140,7 @@ document.getElementById('productForm').addEventListener('submit', async (e) => {
   try {
     if (editingId !== null) {
       // Edit mode: Supabase update karo
-      const { error } = await supabase
+      const { error } = await supabaseClient
         .from('products')
         .update(productData)
         .eq('id', editingId);
@@ -147,7 +151,7 @@ document.getElementById('productForm').addEventListener('submit', async (e) => {
       }
     } else {
       // Add mode: Supabase insert karo
-      const { error } = await supabase
+      const { error } = await supabaseClient
         .from('products')
         .insert([productData]);
 
@@ -211,7 +215,7 @@ document.getElementById('productBody').addEventListener('click', (e) => {
 // deleteProduct(): Supabase se product delete karta hai
 async function deleteProduct(id) {
   try {
-    const { error } = await supabase
+    const { error } = await supabaseClient
       .from('products')
       .delete()
       .eq('id', id);
