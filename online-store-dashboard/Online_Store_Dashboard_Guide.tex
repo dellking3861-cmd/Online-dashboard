@@ -1,0 +1,1108 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{amsmath}
+\usepackage{float}
+
+\geometry{margin=2.5cm}
+
+% Colors
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{headerblue}{RGB}{44,62,80}
+\definecolor{accentgreen}{RGB}{39,174,96}
+\definecolor{accentblue}{RGB}{52,152,219}
+\definecolor{accentred}{RGB}{231,76,60}
+
+% Code style
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{blue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2,
+    frame=single
+}
+\lstset{style=mystyle}
+
+% JavaScript language definition
+\lstdefinelanguage{JavaScript}{
+  keywords={const, let, var, function, return, if, else, for, while, do, break, continue, new, try, catch, throw, async, await, class, extends, super, this, typeof, instanceof, switch, case, default, null, undefined, true, false},
+  morecomment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]',
+  morestring=[b]",
+  morestring=[b]`,
+}
+
+% JSON language definition
+\lstdefinelanguage{JSON}{
+  keywords={true, false, null},
+  morecomment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]",
+}
+
+% CSS language definition
+\lstdefinelanguage{CSS}{
+  keywords={color,background,background-color,border,border-radius,display,position,fixed,flex,justify-content,align-items,padding,margin,width,height,font-size,font-weight,border-collapse,overflow-x,transition,z-index,min-height,max-width,cursor,text-align,text-transform,letter-spacing},
+  morecomment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]",
+  morestring=[b]',
+}
+
+% Header/Footer
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Online Store Dashboard}
+\fancyhead[R]{\small Student Guide}
+\fancyfoot[C]{\thepage}
+
+% Title formatting
+\titleformat{\section}{\Large\bfseries\color{headerblue}}{\thesection}{1em}{}
+\titleformat{\subsection}{\large\bfseries\color{accentblue}}{\thesubsection}{1em}{}
+
+\begin{document}
+
+% ==================== TITLE PAGE ====================
+\begin{titlepage}
+    \centering
+    \vspace*{2cm}
+    
+    {\Huge\bfseries Online Store Dashboard\par}
+    \vspace{1cm}
+    {\Large Complete Student Guide\par}
+    \vspace{0.5cm}
+    {\large Express.js + Supabase + HTML/CSS/JavaScript\par}
+    
+    \vspace{2cm}
+    
+    \begin{center}
+        \fbox{
+            \begin{minipage}{0.8\textwidth}
+                \centering
+                \vspace{0.5cm}
+                {\large\textbf{Project Overview}\par}
+                \vspace{0.3cm}
+                Is project mein humne ek complete Online Store Dashboard banaya hai\\
+                jisme products ko add, edit, delete aur view kar sakte hain.\\
+                Pehle local server (Express) use kiya, phir Supabase (cloud) par migrate kiya.
+                \vspace{0.5cm}
+            \end{minipage}
+        }
+    \end{center}
+    
+    \vspace{2cm}
+    {\large\textbf{Technologies Used}\par}
+    \vspace{0.5cm}
+    \begin{tabular}{ll}
+        \textbf{Backend:} & Node.js, Express.js, CORS \\
+        \textbf{Database:} & JSON file (local), Supabase (cloud) \\
+        \textbf{Frontend:} & HTML5, CSS3, JavaScript (ES6+) \\
+        \textbf{API:} & REST API, Supabase JavaScript Client \\
+    \end{tabular}
+    
+    \vfill
+    {\large\date{\today}\par}
+\end{titlepage}
+
+% ==================== TABLE OF CONTENTS ====================
+\newpage
+\tableofcontents
+\newpage
+
+% ==================== SECTION 1 ====================
+\section{Project Structure}
+\label{sec:structure}
+
+\subsection{Folder Structure}
+Sab se pehle humne project ka folder structure banaya:
+
+\begin{lstlisting}[language=bash, caption={Project Folder Structure}]
+online-store-dashboard/
+|-- backend/
+|   |-- package.json
+|   |-- package-lock.json
+|   |-- products.json
+|   `-- server.js
+`-- frontend/
+    |-- index.html
+    |-- style.css
+    `-- script.js
+\end{lstlisting}
+
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{backend/} - Server-side code, data storage, API routes
+    \item \textbf{frontend/} - User interface, styling, client-side logic
+    \item \textbf{products.json} - Sample products ka data (3 products)
+\end{itemize}
+
+\subsection{Products Data}
+\texttt{products.json} mein 3 sample products hain:
+
+\begin{lstlisting}[language=json, caption={products.json - Sample Data}]
+[
+  {
+    "id": 1,
+    "name": "Wireless Mouse",
+    "price": 1500,
+    "stock": 25,
+    "category": "Electronics"
+  },
+  {
+    "id": 2,
+    "name": "Notebook",
+    "price": 200,
+    "stock": 100,
+    "category": "Stationery"
+  },
+  {
+    "id": 3,
+    "name": "Water Bottle",
+    "price": 500,
+    "stock": 50,
+    "category": "Accessories"
+  }
+]
+\end{lstlisting}
+
+% ==================== SECTION 2 ====================
+\section{Express Server Setup}
+\label{sec:express}
+
+\subsection{Installation}
+Backend folder mein Express install karne ke liye:
+
+\begin{lstlisting}[language=bash, caption={Express Installation}]
+cd backend
+npm init -y
+npm install express
+npm install cors
+\end{lstlisting}
+
+\subsection{Server Code}
+\texttt{server.js} - Basic Express server:
+
+\begin{lstlisting}[language=JavaScript, caption={server.js - Express Server}]
+const express = require('express');
+const cors = require('cors');
+const fs = require('fs');
+const path = require('path');
+
+const app = express();
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// products.json file ka path
+const productsFile = path.join(__dirname, 'products.json');
+
+// Helper functions
+function readProducts() {
+  const data = fs.readFileSync(productsFile, 'utf8');
+  return JSON.parse(data);
+}
+
+function writeProducts(products) {
+  fs.writeFileSync(productsFile, JSON.stringify(products, null, 2));
+}
+
+// Root route
+app.get('/', (req, res) => {
+  res.send('Welcome to Online Store API!');
+});
+
+app.listen(3000, () => {
+  console.log('Server chal raha hai: http://localhost:3000');
+});
+\end{lstlisting}
+
+\subsection{Server Chalana}
+\begin{lstlisting}[language=bash, caption={Server Start}]
+node server.js
+\end{lstlisting}
+
+Output: \texttt{Server chal raha hai: http://localhost:3000}
+
+% ==================== SECTION 3 ====================
+\section{CRUD API (Backend)}
+\label{sec:crud}
+
+\subsection{REST API Routes}
+CRUD ka matlab hai: \textbf{C}reate, \textbf{R}ead, \textbf{U}pdate, \textbf{D}elete.
+
+\begin{table}[H]
+\centering
+\caption{CRUD API Routes}
+\begin{tabular}{@{}llll@{}}
+\toprule
+\textbf{Method} & \textbf{Route} & \textbf{Kaam} & \textbf{Status} \\
+\midrule
+GET & /api/products & Saare products & 200 \\
+GET & /api/products/:id & Ek product & 200/404 \\
+POST & /api/products & Naya product add & 201 \\
+PUT & /api/products/:id & Product update & 200/404 \\
+DELETE & /api/products/:id & Product delete & 200/404 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{CRUD Routes Code}
+
+\begin{lstlisting}[language=JavaScript, caption={GET - Saare Products}]
+// GET /api/products -> saare products return karta hai (200)
+app.get('/api/products', (req, res) => {
+  const products = readProducts();
+  res.status(200).json(products);
+});
+\end{lstlisting}
+
+\begin{lstlisting}[language=JavaScript, caption={GET - Ek Product by ID}]
+// GET /api/products/:id -> ek product return karta hai
+app.get('/api/products/:id', (req, res) => {
+  const products = readProducts();
+  const id = parseInt(req.params.id);
+  const product = products.find(p => p.id === id);
+
+  if (!product) {
+    return res.status(404).json({ message: 'Product nahi mila' });
+  }
+
+  res.status(200).json(product);
+});
+\end{lstlisting}
+
+\begin{lstlisting}[language=JavaScript, caption={POST - Naya Product Add}]
+// POST /api/products -> naya product add karta hai (201)
+app.post('/api/products', (req, res) => {
+  const products = readProducts();
+  const { name, price, stock, category } = req.body;
+
+  const newId = products.length > 0 
+    ? Math.max(...products.map(p => p.id)) + 1 
+    : 1;
+
+  const newProduct = { id: newId, name, price, stock, category };
+
+  products.push(newProduct);
+  writeProducts(products);
+
+  res.status(201).json(newProduct);
+});
+\end{lstlisting}
+
+\begin{lstlisting}[language=JavaScript, caption={PUT - Product Update}]
+// PUT /api/products/:id -> product update karta hai
+app.put('/api/products/:id', (req, res) => {
+  const products = readProducts();
+  const id = parseInt(req.params.id);
+  const index = products.findIndex(p => p.id === id);
+
+  if (index === -1) {
+    return res.status(404).json({ message: 'Product nahi mila' });
+  }
+
+  const { name, price, stock, category } = req.body;
+
+  if (name !== undefined) products[index].name = name;
+  if (price !== undefined) products[index].price = price;
+  if (stock !== undefined) products[index].stock = stock;
+  if (category !== undefined) products[index].category = category;
+
+  writeProducts(products);
+  res.status(200).json(products[index]);
+});
+\end{lstlisting}
+
+\begin{lstlisting}[language=JavaScript, caption={DELETE - Product Delete}]
+// DELETE /api/products/:id -> product delete karta hai
+app.delete('/api/products/:id', (req, res) => {
+  const products = readProducts();
+  const id = parseInt(req.params.id);
+  const index = products.findIndex(p => p.id === id);
+
+  if (index === -1) {
+    return res.status(404).json({ message: 'Product nahi mila' });
+  }
+
+  const deletedProduct = products.splice(index, 1)[0];
+  writeProducts(products);
+
+  res.status(200).json({ message: 'Product delete ho gaya', deletedProduct });
+});
+\end{lstlisting}
+
+% ==================== SECTION 4 ====================
+\section{Frontend Design (HTML + CSS)}
+\label{sec:frontend}
+
+\subsection{HTML Structure}
+\texttt{index.html} - Dashboard ka main structure:
+
+\begin{lstlisting}[language=HTML, caption={index.html - Main Structure}]
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Online Store Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Toast Notifications Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Header -->
+  <header class="header">
+    <h1>Online Store Dashboard</h1>
+  </header>
+
+  <!-- Main Container -->
+  <main class="container">
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <button id="addProductBtn" class="btn btn-green">+ Add Product</button>
+      <input type="text" id="searchInput" class="search-input" placeholder="Search products...">
+    </div>
+
+    <!-- Products Table -->
+    <div class="table-wrapper">
+      <table class="products-table" id="productsTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Category</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="productBody">
+          <!-- Products yahan JavaScript se add honge -->
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- Modal (Add/Edit Product) -->
+  <div id="productModal" class="modal-overlay hidden">
+    <div class="modal">
+      <h2 id="modalTitle">Add Product</h2>
+      <form id="productForm">
+        <div class="form-group">
+          <label for="productName">Name</label>
+          <input type="text" id="productName" name="name" required>
+        </div>
+        <div class="form-group">
+          <label for="productPrice">Price</label>
+          <input type="number" id="productPrice" name="price" required>
+        </div>
+        <div class="form-group">
+          <label for="productStock">Stock</label>
+          <input type="number" id="productStock" name="stock" required>
+        </div>
+        <div class="form-group">
+          <label for="productCategory">Category</label>
+          <input type="text" id="productCategory" name="category" required>
+        </div>
+        <div class="modal-actions">
+          <button type="submit" class="btn btn-green">Save</button>
+          <button type="button" id="cancelBtn" class="btn btn-gray">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="script.js"></script>
+</body>
+</html>
+\end{lstlisting}
+
+\subsection{CSS Styling}
+\texttt{style.css} - Modern clean design:
+
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{Colors:} Light gray background (\#f0f2f5), white cards
+    \item \textbf{Buttons:} Green (Add), Blue (Edit), Red (Delete)
+    \item \textbf{Table:} Dark header, hover effect
+    \item \textbf{Modal:} Dark overlay + centered white form
+    \item \textbf{Responsive:} Mobile par toolbar stack, table scroll
+\end{itemize}
+
+\begin{lstlisting}[language=CSS, caption={style.css - Key Styles}]
+/* Toast Notifications */
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 2000;
+}
+
+.toast-success { background-color: #27ae60; }
+.toast-error { background-color: #e74c3c; }
+
+/* Buttons */
+.btn-green { background-color: #27ae60; color: #ffffff; }
+.btn-edit { background-color: #3498db; color: #ffffff; }
+.btn-delete { background-color: #e74c3c; color: #ffffff; }
+
+/* Table */
+.products-table thead { background-color: #2c3e50; color: #ffffff; }
+.products-table tbody tr:hover { background-color: #f5f7fa; }
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .toolbar { flex-direction: column; }
+  .btn, .btn-edit, .btn-delete { min-height: 40px; }
+}
+\end{lstlisting}
+
+% ==================== SECTION 5 ====================
+\section{Frontend JavaScript (CRUD Logic)}
+\label{sec:js}
+
+\subsection{Supabase Client Initialization}
+\texttt{script.js} - Supabase client setup:
+
+\begin{lstlisting}[language=JavaScript, caption={Supabase Client Setup}]
+// ===== Supabase Client Initialization =====
+
+const supabaseUrl = 'https://dntjgvacurwpcyavwdkc.supabase.co';
+const supabaseKey = 'sb_publishable_-_6VQDTsincVrv5FwvCZow_g1F7dFHA';
+const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+// DOMContentLoaded par loadProducts() call karo
+document.addEventListener('DOMContentLoaded', () => {
+  loadProducts();
+});
+\end{lstlisting}
+
+\subsection{Toast Notifications}
+\begin{lstlisting}[language=JavaScript, caption={Toast Notification Function}]
+// showToast(): success/error message top-right me dikhata hai
+function showToast(message, type = 'success') {
+  const container = document.getElementById('toastContainer');
+
+  const toast = document.createElement('div');
+  toast.className = `toast toast-${type}`;
+  toast.textContent = message;
+
+  container.appendChild(toast);
+
+  // 3 second baad auto-remove
+  setTimeout(() => {
+    toast.classList.add('hide');
+    setTimeout(() => {
+      toast.remove();
+    }, 300);
+  }, 3000);
+}
+\end{lstlisting}
+
+\subsection{Read Products (GET)}
+\begin{lstlisting}[language=JavaScript, caption={loadProducts() - Supabase Select}]
+// loadProducts(): Supabase se products fetch karta hai
+async function loadProducts() {
+  const tbody = document.getElementById('productBody');
+
+  // Loading state dikhao
+  tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#888;">Loading...</td></tr>';
+
+  try {
+    const { data: products, error } = await supabase
+      .from('products')
+      .select('*');
+
+    if (error) throw error;
+
+    renderProducts(products);
+  } catch (error) {
+    console.error('Products load karne me error:', error);
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#e74c3c;">Products load karne me error aaya. Server check karein.</td></tr>';
+    showToast('Error: Server se connect nahi ho paya', 'error');
+  }
+}
+\end{lstlisting}
+
+\subsection{Render Products}
+\begin{lstlisting}[language=JavaScript, caption={renderProducts() - Table Rows}]
+// renderProducts(): products ko table rows me render karta hai
+function renderProducts(products) {
+  const tbody = document.getElementById('productBody');
+
+  // Agar products khali hain to message dikhao
+  if (products.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#888;">Koi product nahi hai</td></tr>';
+    return;
+  }
+
+  // Har product ki ek table row banayein
+  const rows = products.map(product => `
+    <tr>
+      <td>${product.id}</td>
+      <td>${product.name}</td>
+      <td>Rs. ${product.price}</td>
+      <td>${product.stock}</td>
+      <td>${product.category}</td>
+      <td>
+        <button class="btn-edit" data-id="${product.id}" 
+                data-name="${product.name}" data-price="${product.price}" 
+                data-stock="${product.stock}" data-category="${product.category}">Edit</button>
+        <button class="btn-delete" data-id="${product.id}">Delete</button>
+      </td>
+    </tr>
+  `).join('');
+
+  tbody.innerHTML = rows;
+}
+\end{lstlisting}
+
+\subsection{Add Product (POST)}
+\begin{lstlisting}[language=JavaScript, caption={Form Submit - Add/Edit}]
+document.getElementById('productForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const name = document.getElementById('productName').value.trim();
+  const price = parseFloat(document.getElementById('productPrice').value);
+  const stock = parseInt(document.getElementById('productStock').value);
+  const category = document.getElementById('productCategory').value.trim();
+
+  // Form validation
+  if (!name || !category) {
+    showToast('Error: Name aur Category zaroori hain!', 'error');
+    return;
+  }
+
+  if (isNaN(price) || price < 0) {
+    showToast('Error: Price negative nahi ho sakta!', 'error');
+    return;
+  }
+
+  if (isNaN(stock) || stock < 0) {
+    showToast('Error: Stock negative nahi ho sakta!', 'error');
+    return;
+  }
+
+  const productData = { name, price, stock, category };
+
+  try {
+    if (editingId !== null) {
+      // Edit mode: Supabase update karo
+      const { error } = await supabase
+        .from('products')
+        .update(productData)
+        .eq('id', editingId);
+
+      if (error) {
+        showToast(`Error: ${error.message || 'Update me error aaya'}`, 'error');
+        return;
+      }
+    } else {
+      // Add mode: Supabase insert karo
+      const { error } = await supabase
+        .from('products')
+        .insert([productData]);
+
+      if (error) {
+        showToast(`Error: ${error.message || 'Add karne me error aaya'}`, 'error');
+        return;
+      }
+    }
+
+    // Success par: modal band, loadProducts() call
+    document.getElementById('productModal').classList.add('hidden');
+    document.getElementById('productForm').reset();
+    editingId = null;
+    loadProducts();
+    showToast('Product saved ho gaya!', 'success');
+  } catch (error) {
+    console.error('Error:', error);
+    showToast('Error: Server se connect nahi ho paya', 'error');
+  }
+});
+\end{lstlisting}
+
+\subsection{Delete Product (DELETE)}
+\begin{lstlisting}[language=JavaScript, caption={deleteProduct() - Supabase Delete}]
+// deleteProduct(): Supabase se product delete karta hai
+async function deleteProduct(id) {
+  try {
+    const { error } = await supabase
+      .from('products')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      showToast(`Error: ${error.message || 'Delete me error aaya'}`, 'error');
+      return;
+    }
+
+    // Delete ke baad loadProducts() call karo
+    loadProducts();
+    showToast('Product delete ho gaya!', 'success');
+  } catch (error) {
+    console.error('Error:', error);
+    showToast('Error: Server se connect nahi ho paya', 'error');
+  }
+}
+\end{lstlisting}
+
+% ==================== SECTION 6 ====================
+\section{Supabase Migration}
+\label{sec:supabase}
+
+\subsection{Fetch vs Supabase Comparison}
+\begin{table}[H]
+\centering
+\caption{Fetch API vs Supabase Methods}
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Operation} & \textbf{Fetch (Local)} & \textbf{Supabase} \\
+\midrule
+Read & \texttt{fetch('/api/products')} & \texttt{supabase.from('products').select('*')} \\
+Create & \texttt{fetch('/api/products', \{method:'POST'\})} & \texttt{supabase.from('products').insert([data])} \\
+Update & \texttt{fetch('/api/products/:id', \{method:'PUT'\})} & \texttt{supabase.from('products').update(data).eq('id', id)} \\
+Delete & \texttt{fetch('/api/products/:id', \{method:'DELETE'\})} & \texttt{supabase.from('products').delete().eq('id', id)} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Supabase Setup Steps}
+\begin{enumerate}[leftmargin=2em]
+    \item Supabase account banayein
+    \item Naya project create karein
+    \item \texttt{products} table banayein (id, name, price, stock, category)
+    \item Project URL aur anon key copy karein
+    \item CDN script HTML mein add karein
+    \item Client initialize karein
+\end{enumerate}
+
+% ==================== SECTION 7 ====================
+\section{Testing}
+\label{sec:testing}
+
+\subsection{API Testing (Thunder Client / Postman)}
+\begin{table}[H]
+\centering
+\caption{API Test Results}
+\begin{tabular}{@{}llll@{}}
+\toprule
+\textbf{Method} & \textbf{URL} & \textbf{Body} & \textbf{Result} \\
+\midrule
+GET & /api/products & - & 200 - Saare products \\
+GET & /api/products/1 & - & 200 - Ek product \\
+GET & /api/products/999 & - & 404 - Product nahi mila \\
+POST & /api/products & \{name, price, stock, category\} & 201 - Naya product \\
+PUT & /api/products/4 & \{price: 2800\} & 200 - Update hua \\
+DELETE & /api/products/4 & - & 200 - Delete hua \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Browser Testing}
+\begin{enumerate}[leftmargin=2em]
+    \item Server chalayein: \texttt{node server.js}
+    \item Browser mein \texttt{index.html} kholen
+    \item Products table mein dikhne chahiye
+    \item Add/Edit/Delete test karein
+    \item Mobile view (DevTools) mein responsive check karein
+\end{enumerate}
+
+% ==================== SECTION 8 ====================
+\section{Seekhne Ke Liye Key Concepts}
+\label{sec:learn}
+
+\begin{enumerate}[leftmargin=2em]
+    \item \textbf{Project Structure} - Backend/frontend alag rakhna
+    \item \textbf{REST API} - CRUD operations ka concept
+    \item \textbf{Express.js} - Node.js server banana
+    \item \textbf{Fetch API} - Frontend se backend data lena
+    \item \textbf{CORS} - Cross-origin requests
+    \item \textbf{DOM Manipulation} - Table rows, modal, event listeners
+    \item \textbf{Async/Await} - Asynchronous JavaScript
+    \item \textbf{Form Validation} - User input check karna
+    \item \textbf{Responsive Design} - Mobile-friendly UI
+    \item \textbf{Toast Notifications} - User feedback
+    \item \textbf{Supabase} - Cloud database (Backend-as-a-Service)
+    \item \textbf{Migration} - Local se cloud par shift karna
+\end{enumerate}
+
+% ==================== SECTION 9 ====================
+\section{Next Steps / Aage Kya Kar Sakte Hain}
+\label{sec:next}
+
+\begin{itemize}[leftmargin=2em]
+    \item Search functionality implement karna
+    \item Supabase authentication add karna
+    \item Product images add karna
+    \item Sorting/filtering features
+    \item Deploy karna (Netlify/Vercel for frontend)
+    \item Pagination add karna
+    \item Real-time updates (Supabase Realtime)
+\end{itemize}
+
+% ==================== APPENDIX ====================
+\appendix
+\section{Complete File Listings}
+\label{sec:appendix}
+
+\subsection{server.js (Complete)}
+\begin{lstlisting}[language=JavaScript, caption={server.js - Full Code}]
+const express = require('express');
+const cors = require('cors');
+const fs = require('fs');
+const path = require('path');
+
+const app = express();
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+const productsFile = path.join(__dirname, 'products.json');
+
+function readProducts() {
+  const data = fs.readFileSync(productsFile, 'utf8');
+  return JSON.parse(data);
+}
+
+function writeProducts(products) {
+  fs.writeFileSync(productsFile, JSON.stringify(products, null, 2));
+}
+
+// Root route
+app.get('/', (req, res) => {
+  res.send('Welcome to Online Store API!');
+});
+
+// GET /api/products
+app.get('/api/products', (req, res) => {
+  const products = readProducts();
+  res.status(200).json(products);
+});
+
+// GET /api/products/:id
+app.get('/api/products/:id', (req, res) => {
+  const products = readProducts();
+  const id = parseInt(req.params.id);
+  const product = products.find(p => p.id === id);
+
+  if (!product) {
+    return res.status(404).json({ message: 'Product nahi mila' });
+  }
+
+  res.status(200).json(product);
+});
+
+// POST /api/products
+app.post('/api/products', (req, res) => {
+  const products = readProducts();
+  const { name, price, stock, category } = req.body;
+
+  const newId = products.length > 0 
+    ? Math.max(...products.map(p => p.id)) + 1 
+    : 1;
+
+  const newProduct = { id: newId, name, price, stock, category };
+
+  products.push(newProduct);
+  writeProducts(products);
+
+  res.status(201).json(newProduct);
+});
+
+// PUT /api/products/:id
+app.put('/api/products/:id', (req, res) => {
+  const products = readProducts();
+  const id = parseInt(req.params.id);
+  const index = products.findIndex(p => p.id === id);
+
+  if (index === -1) {
+    return res.status(404).json({ message: 'Product nahi mila' });
+  }
+
+  const { name, price, stock, category } = req.body;
+
+  if (name !== undefined) products[index].name = name;
+  if (price !== undefined) products[index].price = price;
+  if (stock !== undefined) products[index].stock = stock;
+  if (category !== undefined) products[index].category = category;
+
+  writeProducts(products);
+  res.status(200).json(products[index]);
+});
+
+// DELETE /api/products/:id
+app.delete('/api/products/:id', (req, res) => {
+  const products = readProducts();
+  const id = parseInt(req.params.id);
+  const index = products.findIndex(p => p.id === id);
+
+  if (index === -1) {
+    return res.status(404).json({ message: 'Product nahi mila' });
+  }
+
+  const deletedProduct = products.splice(index, 1)[0];
+  writeProducts(products);
+
+  res.status(200).json({ message: 'Product delete ho gaya', deletedProduct });
+});
+
+app.listen(3000, () => {
+  console.log('Server chal raha hai: http://localhost:3000');
+});
+\end{lstlisting}
+
+\subsection{script.js (Complete)}
+\begin{lstlisting}[language=JavaScript, caption={script.js - Full Code}]
+// ===== Supabase Client Initialization =====
+
+const supabaseUrl = 'https://dntjgvacurwpcyavwdkc.supabase.co';
+const supabaseKey = 'sb_publishable_-_6VQDTsincVrv5FwvCZow_g1F7dFHA';
+const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+// DOMContentLoaded par loadProducts() call karo
+document.addEventListener('DOMContentLoaded', () => {
+  loadProducts();
+});
+
+// ===== Toast Notifications =====
+
+function showToast(message, type = 'success') {
+  const container = document.getElementById('toastContainer');
+
+  const toast = document.createElement('div');
+  toast.className = `toast toast-${type}`;
+  toast.textContent = message;
+
+  container.appendChild(toast);
+
+  setTimeout(() => {
+    toast.classList.add('hide');
+    setTimeout(() => {
+      toast.remove();
+    }, 300);
+  }, 3000);
+}
+
+// ===== Read Products =====
+
+async function loadProducts() {
+  const tbody = document.getElementById('productBody');
+
+  tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#888;">Loading...</td></tr>';
+
+  try {
+    const { data: products, error } = await supabase
+      .from('products')
+      .select('*');
+
+    if (error) throw error;
+
+    renderProducts(products);
+  } catch (error) {
+    console.error('Products load karne me error:', error);
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#e74c3c;">Products load karne me error aaya. Server check karein.</td></tr>';
+    showToast('Error: Server se connect nahi ho paya', 'error');
+  }
+}
+
+// ===== Render Products =====
+
+function renderProducts(products) {
+  const tbody = document.getElementById('productBody');
+
+  if (products.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#888;">Koi product nahi hai</td></tr>';
+    return;
+  }
+
+  const rows = products.map(product => `
+    <tr>
+      <td>${product.id}</td>
+      <td>${product.name}</td>
+      <td>Rs. ${product.price}</td>
+      <td>${product.stock}</td>
+      <td>${product.category}</td>
+      <td>
+        <button class="btn-edit" data-id="${product.id}" 
+                data-name="${product.name}" data-price="${product.price}" 
+                data-stock="${product.stock}" data-category="${product.category}">Edit</button>
+        <button class="btn-delete" data-id="${product.id}">Delete</button>
+      </td>
+    </tr>
+  `).join('');
+
+  tbody.innerHTML = rows;
+}
+
+// ===== Modal Open/Close =====
+
+document.getElementById('addProductBtn').addEventListener('click', () => {
+  editingId = null;
+  document.getElementById('modalTitle').textContent = 'Add Product';
+  document.getElementById('productForm').reset();
+  document.getElementById('productModal').classList.remove('hidden');
+});
+
+document.getElementById('cancelBtn').addEventListener('click', () => {
+  document.getElementById('productModal').classList.add('hidden');
+});
+
+document.getElementById('productModal').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('productModal')) {
+    document.getElementById('productModal').classList.add('hidden');
+  }
+});
+
+// ===== Form Submit (Add/Edit) =====
+
+let editingId = null;
+
+document.getElementById('productForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const name = document.getElementById('productName').value.trim();
+  const price = parseFloat(document.getElementById('productPrice').value);
+  const stock = parseInt(document.getElementById('productStock').value);
+  const category = document.getElementById('productCategory').value.trim();
+
+  if (!name || !category) {
+    showToast('Error: Name aur Category zaroori hain!', 'error');
+    return;
+  }
+
+  if (isNaN(price) || price < 0) {
+    showToast('Error: Price negative nahi ho sakta!', 'error');
+    return;
+  }
+
+  if (isNaN(stock) || stock < 0) {
+    showToast('Error: Stock negative nahi ho sakta!', 'error');
+    return;
+  }
+
+  const productData = { name, price, stock, category };
+
+  try {
+    if (editingId !== null) {
+      const { error } = await supabase
+        .from('products')
+        .update(productData)
+        .eq('id', editingId);
+
+      if (error) {
+        showToast(`Error: ${error.message || 'Update me error aaya'}`, 'error');
+        return;
+      }
+    } else {
+      const { error } = await supabase
+        .from('products')
+        .insert([productData]);
+
+      if (error) {
+        showToast(`Error: ${error.message || 'Add karne me error aaya'}`, 'error');
+        return;
+      }
+    }
+
+    document.getElementById('productModal').classList.add('hidden');
+    document.getElementById('productForm').reset();
+    editingId = null;
+    loadProducts();
+    showToast('Product saved ho gaya!', 'success');
+  } catch (error) {
+    console.error('Error:', error);
+    showToast('Error: Server se connect nahi ho paya', 'error');
+  }
+});
+
+// ===== Edit & Delete Events =====
+
+document.getElementById('productBody').addEventListener('click', (e) => {
+  if (e.target.classList.contains('btn-edit')) {
+    const id = e.target.dataset.id;
+    const name = e.target.dataset.name;
+    const price = e.target.dataset.price;
+    const stock = e.target.dataset.stock;
+    const category = e.target.dataset.category;
+
+    editingId = parseInt(id);
+    document.getElementById('modalTitle').textContent = 'Edit Product';
+
+    document.getElementById('productName').value = name;
+    document.getElementById('productPrice').value = price;
+    document.getElementById('productStock').value = stock;
+    document.getElementById('productCategory').value = category;
+
+    document.getElementById('productModal').classList.remove('hidden');
+  }
+
+  if (e.target.classList.contains('btn-delete')) {
+    const id = e.target.dataset.id;
+
+    if (confirm('Kya aap yeh product delete karna chahte hain?')) {
+      deleteProduct(id);
+    }
+  }
+});
+
+// ===== Delete Product =====
+
+async function deleteProduct(id) {
+  try {
+    const { error } = await supabase
+      .from('products')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      showToast(`Error: ${error.message || 'Delete me error aaya'}`, 'error');
+      return;
+    }
+
+    loadProducts();
+    showToast('Product delete ho gaya!', 'success');
+  } catch (error) {
+    console.error('Error:', error);
+    showToast('Error: Server se connect nahi ho paya', 'error');
+  }
+}
+\end{lstlisting}
+
+\end{document}
